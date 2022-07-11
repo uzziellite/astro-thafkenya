@@ -1,0 +1,83 @@
+---
+import {Directus} from "@directus/sdk"
+import Layout from "@layouts/layout.astro"
+import Banner from "@components/Banner.vue"
+
+// src/pages/news/[slug].astro
+export async function getStaticPaths() {
+  
+  const url = import.meta.env.PUBLIC_CMS
+  
+  const directus = new Directus(url)
+  
+  const news_data = await directus.items('thaf_news').readByQuery({
+    filter:{
+      "_and":[
+        {
+          "status":{
+            "_eq":"published"
+          }
+        }
+      ]
+    },
+    limit:-1,
+    fields:["slug"]
+  }).catch()
+
+  const news = news_data.data
+
+  let store = []
+
+  news.map((item) => {
+    let data = {}
+    data.params = {}
+    data.params.slug = item.slug
+    store.push(data)
+  })
+  
+  return store
+}
+
+const url = import.meta.env.PUBLIC_CMS
+
+const {slug} = Astro.params
+
+const directus = new Directus(url)
+
+const post_data = await directus.items('thaf_news').readByQuery({
+	filter:{
+		"_and":[
+			{
+				"status":{
+					"_eq":"published"
+				}
+			},
+			{
+				"slug":{
+					"_eq":slug
+				}
+			}
+		]
+	}
+})
+
+const post = post_data.data
+---
+
+<Layout title={post[0].title} description={post[0].seo_description} og_image={`${url}assets/${post[0].banner}?format=webp`} og_url={`${import.meta.env.PUBLIC_APP}news/${slug}`}>
+	<Banner 
+		background={`${url}assets/${post[0].banner}?format=webp`} 
+		title={post[0].title}
+		description="" 
+	/>
+	<article class="max-w-2xl px-6 mx-auto space-y-16 dark:text-stone-100">
+		<div class="w-full mx-auto space-y-4">
+			<p class="text-sm text-center dark:text-stone-400">by
+				<a href="/" class="hover:underline dark:text-green-600">
+					<span>Total Health Advocacy Foundation</span>
+				</a>
+			</p>
+		</div>
+		<div class="prose dark:prose-invert" set:html={post[0].content}></div>
+	</article>
+</Layout>

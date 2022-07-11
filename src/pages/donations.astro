@@ -1,0 +1,76 @@
+---
+import {Directus} from "@directus/sdk"
+import Layout from "@layouts/layout.astro"
+import Banner from "@components/Banner.vue"
+
+const url = import.meta.env.PUBLIC_CMS
+const directus = new Directus(url)
+const donation_details_data = await directus.items('thaf_donation_channels').readByQuery({
+	filter:{
+		"status":{
+			"_eq":"published"
+		}
+	},
+	limit:-1
+})
+const donation_details = donation_details_data.data
+---
+<Layout title="Donations - Total Health Advocacy Foundation" description="We rely on the goodwill of all well wishers to help donate anything that can touch a life somewhere">
+	<Banner 
+		background={`${url}assets/fcf7d345-f357-46ff-98c2-e0947f5fe912?fit=contain&height=580&width=720&format=webp`}
+		title="Donations" 
+		description="" 
+	/>
+	<section class="dark:text-stone-100">
+		<div class="container flex flex-col justify-center p-6 mx-auto lg:flex-row lg:justify-between">
+			<div class="flex items-center justify-center sm:p-6 mt-8 lg:mt-0 h-72 sm:h-80 lg:h-96">
+				<img src={`${url}assets/14d014b7-9b34-4c3f-a8a2-94701af0595f?fit=contain&height=720&width=480&format=webp`} alt="Dropping money in a pigey bank" class="object-contain h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128" width={480} height={720}>
+			</div>
+			<div class="flex flex-col sm:justify-center sm:p-6 sm:text-center rounded-sm w-full lg:max-w-md xl:max-w-lg lg:text-left">
+				<h1 class="text-xl font-bold sm:leading-none sm:text-3xl capitalize text-green-600">
+					Total Health advocacy foundation
+				</h1>
+				<p class="mt-6 mb-8 text-sm sm:text-lg sm:mb-12">
+					We seek to make lives better and create sustainable livelihoods among the less fortunate in the society by targeting women and children (mostly orphans and widows). Support this noble course by donating any amount of money, food or clothing that you feel comfortable to give. All donated items are used to encourage change for the better in society and to support the less fortunate
+				</p>
+			</div>
+		</div>
+		<div class="container p-4 mx-auto sm:p-12">
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				{
+					donation_details.map((item) => (
+						<div class="max-w-xs p-6 rounded-md shadow-sm bg-white dark:bg-stone-800 dark:text-stone-100">
+							<img src={`${url}assets/${item.banner}?format=webp`} alt={item.channel} class="rounded-md dark:bg-stone-800" width={250} height={250} />
+							<div class="mt-6 mb-2">
+								<h2 class="text-xl font-semibold tracking-wide">
+									{item.channel}
+								</h2>
+								<span class="font-medium tracking-widest uppercase text-green-600 dark:text-green-600">
+									{item.account}
+								</span>
+							</div>
+							<p class="dark:text-stone-100">
+								{item.description}
+							</p>
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</section>
+	<div class="w-full" style={`background-image: url(${url}assets/ae19ac38-92b0-4c2b-9d43-6a3aaadf4975?format=webp); background-position: center center; background-blend-mode: multiply; background-size: cover;`}>
+		<div class="container flex flex-col flex-wrap content-center justify-center p-4 py-20 mx-auto md:p-10">
+			<h1 class="text-5xl antialiased font-semibold leading-none text-center text-stone-100">
+				Donation
+			</h1>
+			<p class="pt-2 pb-8 text-xl antialiased text-center text-stone-100">
+				To arrange on food or clothing donations, please contact us and we shall be in touch.
+			</p>
+			<div class="grid place-content-center">
+				<a class="text-white font-medium bg-green-600 dark:bg-blue-600 p-2 rounded-md" href="/contact-us">
+					Contact Us
+				</a>
+			</div>
+		</div>
+	</div>
+</Layout>

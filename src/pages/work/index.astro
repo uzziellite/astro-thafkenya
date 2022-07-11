@@ -1,0 +1,43 @@
+---
+import {Directus} from "@directus/sdk"
+import Layout from "@layouts/layout.astro"
+import Banner from "@components/Banner.vue"
+
+const url = import.meta.env.PUBLIC_CMS
+const directus = new Directus(url)
+
+const subcategories_data = await directus.items('thaf_work_subcategories').readByQuery({
+	filter:{
+		"status":{
+			"_eq":"published"
+		}
+	},
+	fields:['title,slug']
+})
+
+const subcategories = subcategories_data.data
+---
+<Layout title="Our Work" description="At Total Health Advocacy Foundation, we major in healthcare mostly where we provide our services">
+	<Banner 
+		background={`${url}assets/c73d9c20-c812-42ce-805e-737db8b56aab?format=webp`}
+		title="What we do" 
+		description="" 
+	/>
+	<section class="dark:text-stone-100">
+		<div class="container p-4 sm:p-12 mx-auto">
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				{
+					subcategories.map((item) => (
+						<a href={`/activity/${item.slug}`} class="p-2 rounded-md shadow-sm bg-white dark:bg-stone-800 dark:text-stone-100">
+							<div class="mt-6 mb-2">
+								<span class="text-xl font-semibold tracking-wide">
+									{item.title}
+								</span>
+							</div>
+						</a>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</Layout>

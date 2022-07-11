@@ -1,0 +1,68 @@
+---
+import {Directus} from "@directus/sdk"
+import Layout from "@layouts/layout.astro"
+import Banner from "@components/Banner.vue"
+
+// src/pages/team/[name].astro
+export async function getStaticPaths() {
+  
+  const url = import.meta.env.PUBLIC_CMS
+  
+  const directus = new Directus(url)
+  
+  const team_data = await directus.items('thaf_team').readByQuery({
+    filter:{
+      "_and":[
+        {
+          "status":{
+            "_eq":"published"
+          }
+        }
+      ]
+    },
+    limit:-1,
+    fields:["slug"]
+  }).catch()
+
+  const team = team_data.data
+
+  let store = []
+
+  team.map((item) => {
+    let data = {}
+    data.params = {}
+    data.params.name = item.slug
+    store.push(data)
+  })
+  
+  return store
+}
+
+const url = import.meta.env.PUBLIC_CMS
+const {name} = Astro.params
+const directus = new Directus(url)
+const profile_data = await directus.items('thaf_team').readByQuery({
+	filter:{
+		"slug":{
+			"_eq":name
+		}
+	}
+})
+const profile = profile_data.data[0]
+---
+
+<Layout title={profile.name} description={profile.description} og_image={`${url}assets/${profile.banner}`} og_url={`${import.meta.env.PUBLIC_APP}team/${name}`}>
+	<Banner 
+		background={`${url}assets/${profile.banner}`}
+		title={profile.name}
+		description=""
+	/>
+	<section class="container mx-auto p-4">
+		<div class="grid place-content-center">
+			<h1 class="text-green-600 dark:text-green-600 text-2xl sm:text-4xl text-center capitalize">
+				Details about {profile.name}
+			</h1>
+			<div class="prose dark:prose-invert" set:html={profile.details}></div>
+		</div>
+	</section>
+</Layout>

@@ -1,0 +1,111 @@
+---
+import {Directus} from "@directus/sdk"
+import Layout from "@layouts/layout.astro"
+import Banner from "@components/Banner.vue"
+
+const url = import.meta.env.PUBLIC_CMS
+const directus = new Directus(url)
+const profiles_data = await directus.items('thaf_team').readByQuery({
+	filter:{
+		"status":{
+			"_eq":"published"
+		}
+	},
+	limit:-1
+})
+const profiles = profiles_data.data
+---
+<Layout title="About Us" description="Total Health Advocacy Foundation is a non-profitable organization whose main aim is to tackle humanitarian crisis.">
+	<Banner 
+		background={`${url}assets/2672f460-60c2-4c7e-9dcf-c300c15dda2c?fit=contain&format=webp`}
+		title="About Us" 
+		description="" 
+	/>
+	<section class="dark:text-stone-100">
+		<div class="container flex flex-col justify-center p-6 mx-auto lg:flex-row lg:justify-between">
+			<div class="flex items-center justify-center p-6 mt-8 lg:mt-0 h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128">
+				<img src={`${url}assets/ae65d0f5-33c9-4990-a44e-125b78acd516?fit=contain&format=webp`} alt="Trainer in training session" class="object-contain h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128 rounded-md" width={450} height={380} />
+			</div>
+			<div class="flex flex-col justify-center sm:p-6 sm:text-center rounded-sm lg:max-w-md xl:max-w-lg lg:text-left">
+				<h1 class="text-3xl font-bold leading-none capitalize text-center text-green-600">
+					Who we are
+				</h1>
+				<p class="mt-6 mb-8 sm:mb-12">
+					Total Health Advocacy Foundation (THAF) is a non-political, non-profitable organization registered in December 2019 by concerted efforts aimed at tackling the humanitarian crisis.<br>
+
+					Our management entails independent non-partisan indigenous professionals experienced practically &amp; technically in various fields namely Gender Health, Capacity Building, Human rights, and Community Development.
+				</p>
+				<div class="flex flex-col space-y-4 sm:items-center sm:justify-center sm:flex-row sm:space-y-0 sm:space-x-4 lg:justify-start text-center">
+					<a href="/contact-us" class="px-8 py-3 text-lg font-semibold rounded bg-green-600 text-stone-100">
+						Contact Us
+					</a>
+					<a href="/donations" class="px-8 py-3 text-lg font-semibold border border-stone-800 dark:border-stone-100 rounded">
+						Donate
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="dark:text-stone-100">
+		<div class="container flex flex-col justify-center p-6 mx-auto lg:flex-row lg:justify-between">
+			<div class="flex flex-col justify-center sm:p-6 sm:text-center rounded-sm lg:max-w-md xl:max-w-lg lg:text-left">
+				<h1 class="text-3xl font-bold leading-none capitalize text-center text-green-600">
+					Our Objective
+				</h1>
+				<p class="mt-6 mb-8 sm:mb-12">
+					Our main objective is to promote Access to Primary Healthcare Services to the less privileged, enhance access to Clean Water and Sanitation, Mitigate the Impact of HIV/AIDS, Promote Human Rights, as well as help fight Drug and Alcohol Addiction/Abuse leading to a healthy population.
+				</p>
+				<div class="flex flex-col space-y-4 sm:items-center sm:justify-center sm:flex-row sm:space-y-0 sm:space-x-4 lg:justify-start text-center">
+					<a href="/news/main-objectives" class="px-8 py-3 text-lg font-semibold rounded bg-green-600 text-stone-100">
+						Detailed Objectives
+					</a>
+				</div>
+			</div>
+			<div class="flex items-center justify-center p-6 mt-8 lg:mt-0 h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128">
+				<img src={`${url}assets/7dad5357-4b25-4d1e-85b8-6a8e083de8d2?fit=contain&format=webp`} alt="Men being educated about safety" class="object-contain h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128 rounded-md" width={450} height={380} />
+			</div>
+		</div>
+	</section>
+	<section class="dark:text-stone-100">
+		<div class="container flex flex-col justify-center p-6 mx-auto lg:flex-row lg:justify-between">
+			<div class="flex items-center justify-center p-6 mt-8 lg:mt-0 h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128">
+				<img src={`${url}assets/8768078c-d1f5-4776-a414-4254e6526029?fit=contain&format=webp`} alt="Picture of ruthimitu girls secondary school" class="object-contain h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128 rounded-md" width={450} height={380} />
+			</div>
+			<div class="flex flex-col justify-center sm:p-6 sm:text-center rounded-sm lg:max-w-md xl:max-w-lg lg:text-left">
+				<h1 class="text-3xl font-bold leading-none capitalize text-center text-green-600">
+					Our Vision
+				</h1>
+				<p class="mt-6 mb-8 sm:mb-12">
+					We envision a society where children and women enjoy healthy enlightened lives in a responsive environment through promotion of social, economic, cultural and moral development. We endeavour to achieve this by giving a free rein of potential to the disadvantaged by providing health care, livelihood skills, access to water and sanitation and community development services. Children, youth and gender development are fundamental to our work.
+				</p>
+			</div>
+		</div>
+	</section>
+	<section class="py-6 dark:text-stone-100">
+		<div class="container flex flex-col items-center justify-center p-4 mx-auto sm:p-10">
+			<h1 class="text-3xl font-bold leading-none text-center sm:text-5xl text-green-600 dark:text-green-600">
+				Our Team
+			</h1>
+			<div class="flex flex-row flex-wrap mt-8">
+				{
+					profiles.map((item) => (
+						<div class="flex flex-col justify-center w-full px-8 mx-6 my-12 text-center rounded-md md:w-96 bg-white dark:bg-stone-800 dark:text-stone-100">
+							<img class="self-center flex-shrink-0 w-32 h-32 -mt-12 bg-center bg-cover rounded-full dark:bg-stone-500" src={`${url}assets/${item.banner}?fit=content&format=webp`} alt={item.name} width={32} height={32} />
+							<a href={`/team/${item.slug}`} class="flex-1 my-4">
+								<p class="text-xl font-semibold leading-snug">
+									{item.name}
+								</p>
+								<p class="text-green-600 dark:text-green-600">
+									{item.role}
+								</p>
+								<p class="text-sm">
+									{item.description}
+								</p>
+							</a>
+						</div>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</Layout>

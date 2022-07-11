@@ -1,0 +1,107 @@
+---
+import {Directus} from "@directus/sdk"
+import Layout from "@layouts/layout.astro"
+import Banner from "@components/Banner.vue"
+
+// src/pages/activity/[slug].astro
+export async function getStaticPaths() {
+  
+  const url = import.meta.env.PUBLIC_CMS
+  
+  const directus = new Directus(url)
+  
+  const activity_data = await directus.items('thaf_work_subcategories').readByQuery({
+    filter:{
+      "_and":[
+        {
+          "status":{
+            "_eq":"published"
+          }
+        },
+        {
+        	"description":{
+        		"_neq":null
+        	}
+        }
+      ]
+    },
+    limit:-1,
+    fields:["slug"]
+  }).catch()
+
+  const activity = activity_data.data
+
+  let store = []
+
+  activity.map((item) => {
+    let data = {}
+    data.params = {}
+    data.params.slug = item.slug
+    store.push(data)
+  })
+  
+  return store
+}
+
+const url = import.meta.env.PUBLIC_CMS
+
+const {slug} = Astro.params
+
+const directus = new Directus(url)
+
+const work_data = await directus.items('thaf_work_info').readByQuery({
+	filter:{
+		"_and":[
+			{
+				"status":{
+					"_eq":"published"
+				}
+			},
+			{
+				"sub_category":{
+					"slug":{
+						"_eq":slug
+					}
+				}
+			}
+		]
+	},
+	limit:-1,
+	sort:"-date_created",
+	fields:['name,method,brief_intro,banner,slug,sub_category.title,sub_category.banner,sub_category.description']
+})
+
+const work_info = work_data.data
+---
+
+<Layout title={work_info[0].sub_category.title} description={work_info[0].sub_category.description} og_image={`${url}assets/${work_info[0].sub_category.banner}?format=webp`} og_url={`${import.meta.env.PUBLIC_APP}activity/${slug}`}>
+	<Banner 
+		background={`${url}assets/${work_info[0].sub_category.banner}`} 
+		title={work_info[0].sub_category.title} 
+		description="" 
+	/>
+	<section class="dark:text-stone-100">
+		<div class="container p-4 sm:p-12 mx-auto">
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				{
+					work_info.map((item) => (
+						<a href={`/work/${item.slug}`} class="max-w-xs p-6 rounded-md shadow-sm bg-white dark:bg-stone-800 dark:text-stone-100">
+							<img src={`${url}assets/${item.banner}?format=webp`} alt={item.channel} class="rounded-md dark:bg-stone-800 h-56 w-full" width={450} height={450} />
+							<div class="mt-6 mb-2">
+								<h2 class="text-xl font-semibold tracking-wide">
+									{item.name}
+								</h2>
+								<span class="font-medium tracking-widest uppercase text-green-600 dark:text-green-600">
+									{item.method}
+								</span>
+							</div>
+							<p class="dark:text-stone-100 text-sm">
+								{item.brief_intro}
+							</p>
+						</a>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</Layout>

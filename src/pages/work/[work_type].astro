@@ -1,0 +1,81 @@
+---
+import {Directus} from "@directus/sdk"
+import Layout from "@layouts/layout.astro"
+import Banner from "@components/Banner.vue"
+
+// src/pages/work/[work_type].astro
+export async function getStaticPaths() {
+  
+  const url = import.meta.env.PUBLIC_CMS
+  
+  const directus = new Directus(url)
+  
+  const work_type_data = await directus.items('thaf_work_info').readByQuery({
+    filter:{
+      "_and":[
+        {
+          "status":{
+            "_eq":"published"
+          }
+        }
+      ]
+    },
+    limit:-1,
+    fields:["slug"]
+  }).catch()
+
+  const works = work_type_data.data
+
+  let store = []
+
+  works.map((item) => {
+    let data = {}
+    data.params = {}
+    data.params.work_type = item.slug
+    store.push(data)
+  })
+  
+  return store
+}
+
+const url = import.meta.env.PUBLIC_CMS
+
+const {work_type} = Astro.params
+
+const directus = new Directus(url)
+
+const work_type_data = await directus.items('thaf_work_info').readByQuery({
+	filter:{
+		"_and":[
+			{
+				"status":{
+					"_eq":"published"
+				}
+			},
+			{
+				"slug":{
+					"_eq":work_type
+				}
+			}
+		]
+	}
+})
+
+const work_data = work_type_data.data
+---
+
+<Layout title={work_data[0].name} description={work_data[0].brief_intro} og_image={`${url}assets/${work_data[0].banner}`} og_url={`${import.meta.env.PUBLIC_APP}work/${work_type}`}>
+	<Banner
+		background={`${url}assets/${work_data[0].banner}`}
+		title=""
+		description=""
+	/>
+	<section class="py-2 dark:text-stone-100">
+		<div class="container mx-auto flex flex-col items-center justify-center p-4 space-y-8 md:p-10 md:px-24 xl:px-48">
+			<h1 class="text-3xl lg:text-5xl font-bold leading-none text-center text-green-600 dark:text-green-600">
+				{work_data[0].name}
+			</h1>
+			<div class="prose dark:prose-invert" set:html={work_data[0].details}></div>
+		</div>
+	</section>
+</Layout>

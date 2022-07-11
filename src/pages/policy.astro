@@ -1,0 +1,39 @@
+---
+import {Directus} from "@directus/sdk"
+import Layout from "@layouts/layout.astro"
+import Banner from "@components/Banner.vue"
+
+const url = import.meta.env.PUBLIC_CMS
+const directus = new Directus(url)
+const thaf_policy_data = await directus.items('thaf_policy').readByQuery({
+	filter:{
+		"status":{
+			"_eq":"published"
+		}
+	}
+})
+const thaf_policy = thaf_policy_data.data
+---
+<Layout title="Organization Policy - Total Health Advocacy Foundation" description="Total health Advocacy foundation is governed by a policy that dictates we must uphold human rights and protect life at all costs.">
+	<Banner 
+		background={`${url}assets/618a20f4-0114-44f6-badb-b180bf901424?fit=contain&height=480&width=720&format=webp`} 
+		title="Organization Policy" 
+		description="" 
+	/>
+	<article class="max-w-2xl px-6 py-12 mx-auto space-y-16 dark:text-stone-100">
+		<div class="w-full mx-auto space-y-4">
+			<h1 class="text-3xl font-bold leading-none capitalize text-center">
+				Total Health Advocacy Foundation Policy
+			</h1>
+			<p class="text-sm dark:text-stone-400 text-center">
+				<strong class="hover:underline text-green-600 dark:text-green-600">
+					<span>Last Updated </span>
+				</strong>on
+				<time date={thaf_policy.time_updated}>
+					{ thaf_policy.time_updated }
+				</time>
+			</p>
+		</div>
+		<div class="prose dark:prose-invert" set:html="thaf_policy.content"></div>
+	</article>
+</Layout>
