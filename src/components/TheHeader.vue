@@ -33,7 +33,7 @@
                     		<template v-for="data in subcategories">
 	                    		<template v-if="item.category === data.category.category">
 														<li class="hover:text-black hover:dark:text-white" @click="workActive = ! workActive">
-															<a :href="`/activity/${data.slug}`">
+															<a :href="`/news/${data.slug}`">
 																{{data.title}}
 															</a>
 														</li>
