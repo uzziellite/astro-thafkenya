@@ -21,7 +21,7 @@ const news = news_data.data
 		<div class="grid grid-cols-1 gap-5 lg:grid-cols-4 sm:grid-cols-2">
 			{
 				news.map((item) => (
-					<a href={`/news/${item.slug}`} class="relative flex items-end justify-start w-full text-left bg-center bg-cover h-96 dark:bg-stone-500" style={`background-image: url(&quot;${url}assets/${item.banner}?format=webp&quot;);`}>
+					<a href={`/news/${item.slug}`} class="relative flex items-end justify-start w-full text-left bg-center bg-cover h-96 dark:bg-stone-500" style={`background-image: url(${url}assets/${item.banner}?format=webp);`}>
 						<div class="absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-b via-transparent from-stone-900 to-stone-900"></div>
 						<div class="absolute top-0 left-0 right-0 flex items-center justify-between mx-5 mt-3">
 							<div class="px-3 py-2 text-xs font-semibold tracking-wider uppercase text-stone-100">
