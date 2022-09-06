@@ -3,12 +3,37 @@
 	<div class="container grid sm:grid-cols-3 gap-x-2 mx-auto">
 		<div class="mx-4">
 			<h2 class="font-black mt-4 text-xl text-green-600">
-				About Us
+				Covid 19 Updates
 			</h2>
-			<div class="text-sm">
-				We advocate for human rights <br/>
-				and good health
-				for everyone<br>
+			<div class="overflow-hidden dark:text-gray-100">
+				<div class="flex justify-between">
+					<div class="flex flex-col flex-1 gap-4">
+						<p class="text-lg">
+							Confirmed New cases today
+						</p>
+						<div class="flex justify-between">
+							<div class="flex gap-2">
+								<span class="text-xl font-semibold" v-if="loaded">
+									{{data.Confirmed}}
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="flex items-center gap-8 py-2 border-t dark:text-gray-400 dark:border-gray-700">
+					<div class="flex items-center space-x-1">
+						<span class="font-bold text-sm" v-if="loaded">
+							{{data.Cumulative_Confirmed}}
+						</span>
+						<span class="text-sm">Total</span>
+					</div>
+					<div class="flex items-center space-x-1">
+						<span class="font-bold text-sm" v-if="loaded">
+							{{data.Cumulative_Deaths}}
+						</span>
+						<span class="text-sm">Deaths</span>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="flex flex-col mx-4 space-y-2">
@@ -65,3 +90,28 @@
 		</div>
 </footer>
 </template>
+
+<script>
+export default{
+	data(){
+		return{
+			data:{},
+			loaded:false
+		}
+	},
+	methods:{
+		loadCovidStats(){
+			fetch('/covid').then((response) => response.json()).then(resp => {
+				this.data = resp
+				this.loaded = true
+			}).catch(err => {
+				console.error(err)
+			})
+		}
+	},
+	created(){
+		this.loadCovidStats()
+	}
+}
+</script>
+
