@@ -101,12 +101,12 @@ export default{
 	},
 	methods:{
 		loadCovidStats(){
-			fetch('/covid').then((response) => response.json()).then(resp => {
+			/*fetch('/covid').then((response) => response.json()).then(resp => {
 				this.data = resp
 				this.loaded = true
 			}).catch(err => {
 				console.error(err)
-			})
+			})*/
 		}
 	},
 	created(){
