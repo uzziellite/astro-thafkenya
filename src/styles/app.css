@@ -1606,6 +1606,10 @@ select {
   height: 14rem;
 }
 
+.h-24 {
+  height: 6rem;
+}
+
 .w-full {
   width: 100%;
 }
@@ -1640,6 +1644,18 @@ select {
 
 .w-48 {
   width: 12rem;
+}
+
+.w-24 {
+  width: 6rem;
+}
+
+.w-28 {
+  width: 7rem;
+}
+
+.w-36 {
+  width: 9rem;
 }
 
 .max-w-xl {
@@ -2097,11 +2113,6 @@ select {
   line-height: 1.75rem;
 }
 
-.text-5xl {
-  font-size: 3rem;
-  line-height: 1;
-}
-
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -2120,6 +2131,11 @@ select {
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
+}
+
+.text-5xl {
+  font-size: 3rem;
+  line-height: 1;
 }
 
 .text-xs {
@@ -2153,10 +2169,6 @@ select {
 
 .capitalize {
   text-transform: capitalize;
-}
-
-.leading-loose {
-  line-height: 2;
 }
 
 .leading-none {
@@ -2383,11 +2395,6 @@ select {
   .dark\:bg-stone-800 {
     --tw-bg-opacity: 1;
     background-color: rgb(41 37 36 / var(--tw-bg-opacity));
-  }
-
-  .dark\:bg-gray-900 {
-    --tw-bg-opacity: 1;
-    background-color: rgb(17 24 39 / var(--tw-bg-opacity));
   }
 
   .dark\:bg-stone-700 {
@@ -2714,8 +2721,8 @@ select {
     display: none;
   }
 
-  .lg\:h-16 {
-    height: 4rem;
+  .lg\:h-24 {
+    height: 6rem;
   }
 
   .lg\:h-96 {
@@ -2724,6 +2731,18 @@ select {
 
   .lg\:h-72 {
     height: 18rem;
+  }
+
+  .lg\:h-20 {
+    height: 5rem;
+  }
+
+  .lg\:h-28 {
+    height: 7rem;
+  }
+
+  .lg\:h-16 {
+    height: 4rem;
   }
 
   .lg\:w-2\/3 {

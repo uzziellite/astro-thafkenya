@@ -49,7 +49,7 @@
         </li>
 			</ul>
 			<a href="/" aria-label="Back to homepage" class="flex items-center">
-				<img src="/images/logo.svg" class="w-20" width="50" height="50" alt="Logo">
+				<img src="/images/logo.jpg" class="w-20" width="50" height="50" alt="Logo">
 			</a>
 			<ul class="items-stretch hidden space-x-3 lg:flex">
 				<li class="flex">
