@@ -93,6 +93,9 @@
 
 <script>
 export default{
+	props:{
+		url: String
+	},
 	data(){
 		return{
 			data:{},
@@ -101,12 +104,12 @@ export default{
 	},
 	methods:{
 		loadCovidStats(){
-			/*fetch('/covid').then((response) => response.json()).then(resp => {
+			fetch(this.url).then((response) => response.json()).then(resp => {
 				this.data = resp
 				this.loaded = true
 			}).catch(err => {
 				console.error(err)
-			})*/
+			})
 		}
 	},
 	created(){
@@ -114,4 +117,3 @@ export default{
 	}
 }
 </script>
-

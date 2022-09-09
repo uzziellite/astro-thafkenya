@@ -11,6 +11,8 @@ const {og_url} = Astro.props
 
 const directus = new Directus(import.meta.env.PUBLIC_CMS)
 
+const covid_url = import.meta.env.PUBLIC_COVID_API
+
 const categories_data = await directus.items('thaf_work_category').readByQuery({
   filter:{
     "status":{
@@ -61,7 +63,10 @@ const subcategories = subcategories_data.data
       <main>
         <slot />
       </main>
-    <TheFooter client:load />
+    <TheFooter 
+      client:load
+      url={covid_url}
+    />
   </body>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5384160930618869" crossorigin="anonymous"></script>
 </html>
