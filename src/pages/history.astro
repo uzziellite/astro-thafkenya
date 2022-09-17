@@ -5,15 +5,21 @@ import Banner from "@components/Banner.vue"
 
 const url = import.meta.env.PUBLIC_CMS
 const directus = new Directus(url)
-const history_data = await directus.items('thaf_history').readByQuery({
-	filter:{
-		"status":{
-			"_eq":"published"
-		}
-	},
-	limit:-1
-})
-const histories = history_data.data
+let history_data
+let histories
+try{
+	history_data = await directus.items('thaf_history').readByQuery({
+		filter:{
+			"status":{
+				"_eq":"published"
+			}
+		},
+		limit:-1
+	})
+	histories = history_data.data
+}catch(err){
+	console.error(err)
+}
 ---
 <Layout title="Our History - Total Health Advocacy FOundation" description="Total health advocacy foundation was founded in 2019. Over the years, we have been advancing our work to promote proper health care in the community.">
 	<Banner 

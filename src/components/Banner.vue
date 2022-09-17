@@ -1,5 +1,5 @@
 <template>
-  <div class="relative pb-16 h-96 flex content-center items-center justify-center">
+  <div class="relative pb-16 h-[32rem] flex content-center items-center justify-center">
     <div class="absolute w-full h-full bg-cover" :style="`background-image: url(${background})`">
       <span id="blackOverlay"
         class="w-full h-full absolute bg-black opacity-20"

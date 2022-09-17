@@ -5,14 +5,23 @@ import Banner from "@components/Banner.vue"
 
 const url = import.meta.env.PUBLIC_CMS
 const directus = new Directus(url)
-const thaf_policy_data = await directus.items('thaf_policy').readByQuery({
-	filter:{
-		"status":{
-			"_eq":"published"
+let thaf_policy_data
+let thaf_policy
+
+try{
+	thaf_policy_data = await directus.items('thaf_policy').readByQuery({
+		filter:{
+			"status":{
+				"_eq":"published"
+			}
 		}
-	}
-})
-const thaf_policy = thaf_policy_data.data
+	})
+	
+	thaf_policy = thaf_policy_data.data
+}catch(err){
+	console.error(err)
+}
+
 ---
 <Layout title="Organization Policy - Total Health Advocacy Foundation" description="Total health Advocacy foundation is governed by a policy that dictates we must uphold human rights and protect life at all costs.">
 	<Banner 

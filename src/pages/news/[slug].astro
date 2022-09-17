@@ -9,31 +9,40 @@ export async function getStaticPaths() {
   const url = import.meta.env.PUBLIC_CMS
   
   const directus = new Directus(url)
-  
-  const news_data = await directus.items('thaf_news').readByQuery({
-    filter:{
-      "_and":[
-        {
-          "status":{
-            "_eq":"published"
-          }
-        }
-      ]
-    },
-    limit:-1,
-    fields:["slug"]
-  }).catch()
 
-  const news = news_data.data
+  let news_data
+  let news
+	
+	try{
+	  news_data = await directus.items('thaf_news').readByQuery({
+	    filter:{
+	      "_and":[
+	        {
+	          "status":{
+	            "_eq":"published"
+	          }
+	        }
+	      ]
+	    },
+	    limit:-1,
+	    fields:["slug"]
+	  })
+
+	  news = news_data.data
+	}catch(err){
+		console.error(err)
+	}  
 
   let store = []
 
-  news.map((item) => {
-    let data = {}
-    data.params = {}
-    data.params.slug = item.slug
-    store.push(data)
-  })
+  if(news){
+	  news.map((item) => {
+	    let data = {}
+	    data.params = {}
+	    data.params.slug = item.slug
+	    store.push(data)
+	  })
+  }
   
   return store
 }
@@ -44,24 +53,31 @@ const {slug} = Astro.params
 
 const directus = new Directus(url)
 
-const post_data = await directus.items('thaf_news').readByQuery({
-	filter:{
-		"_and":[
-			{
-				"status":{
-					"_eq":"published"
-				}
-			},
-			{
-				"slug":{
-					"_eq":slug
-				}
-			}
-		]
-	}
-})
+let post_data
+let post
 
-const post = post_data.data
+try{
+	post_data = await directus.items('thaf_news').readByQuery({
+		filter:{
+			"_and":[
+				{
+					"status":{
+						"_eq":"published"
+					}
+				},
+				{
+					"slug":{
+						"_eq":slug
+					}
+				}
+			]
+		}
+	})
+
+	post = post_data.data
+}catch(err){
+	console.error(err)
+}
 ---
 
 <Layout title={post[0].title} description={post[0].seo_description} og_image={`${url}assets/${post[0].banner}?format=webp`} og_url={`${import.meta.env.PUBLIC_APP}news/${slug}`}>

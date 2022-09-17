@@ -4,16 +4,24 @@ import Layout from "@layouts/layout.astro"
 
 const url = import.meta.env.PUBLIC_CMS
 const directus = new Directus(url)
-const news_data = await directus.items('thaf_news').readByQuery({
-	filter:{
-		"status":{
-			"_eq":"published"
-		}
-	},
-	limit:50,
-	sort:"-date_created"
-})
-const news = news_data.data
+let news_data
+let news
+
+try{
+	news_data = await directus.items('thaf_news').readByQuery({
+		filter:{
+			"status":{
+				"_eq":"published"
+			}
+		},
+		limit:50,
+		sort:"-date_created"
+	})
+	news = news_data.data
+}catch(err){
+	console.error(err)
+}
+
 ---
 
 <Layout title="News - Total Health Advocacy Foundation" description="Stay up to date on the latest information from our team. We will keep you posted on all our humanitarian activities">

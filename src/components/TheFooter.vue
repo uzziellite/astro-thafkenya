@@ -1,5 +1,5 @@
 <template>
-	<footer class="bg-white dark:bg-stone-800 dark:text-white">
+	<footer class="bg-gray-200 shadow-md dark:bg-stone-800 dark:text-white">
 	<div class="container grid sm:grid-cols-3 gap-x-2 mx-auto">
 		<div class="mx-4">
 			<h2 class="font-black mt-4 text-xl text-green-600">

@@ -9,36 +9,46 @@ export async function getStaticPaths() {
   const url = import.meta.env.PUBLIC_CMS
   
   const directus = new Directus(url)
-  
-  const activity_data = await directus.items('thaf_work_subcategories').readByQuery({
-    filter:{
-      "_and":[
-        {
-          "status":{
-            "_eq":"published"
-          }
-        },
-        {
-        	"description":{
-        		"_neq":null
-        	}
-        }
-      ]
-    },
-    limit:-1,
-    fields:["slug"]
-  }).catch()
 
-  const activity = activity_data.data
+  let activity_data
+  let activity
+
+  try{
+	  activity_data = await directus.items('thaf_work_subcategories').readByQuery({
+	    filter:{
+	      "_and":[
+	        {
+	          "status":{
+	            "_eq":"published"
+	          }
+	        },
+	        {
+	        	"description":{
+	        		"_neq":null
+	        	}
+	        }
+	      ]
+	    },
+	    limit:-1,
+	    fields:["slug"]
+	  })
+
+	  activity = activity_data.data
+	}catch(err){
+		console.error(err)
+	}
+  
 
   let store = []
 
-  activity.map((item) => {
-    let data = {}
-    data.params = {}
-    data.params.slug = item.slug
-    store.push(data)
-  })
+  if(activity){
+	  activity.map((item) => {
+	    let data = {}
+	    data.params = {}
+	    data.params.slug = item.slug
+	    store.push(data)
+	  })
+  }
   
   return store
 }
@@ -49,29 +59,36 @@ const {slug} = Astro.params
 
 const directus = new Directus(url)
 
-const work_data = await directus.items('thaf_work_info').readByQuery({
-	filter:{
-		"_and":[
-			{
-				"status":{
-					"_eq":"published"
-				}
-			},
-			{
-				"sub_category":{
-					"slug":{
-						"_eq":slug
+let work_data
+let work_info
+
+try{
+	work_data = await directus.items('thaf_work_info').readByQuery({
+		filter:{
+			"_and":[
+				{
+					"status":{
+						"_eq":"published"
+					}
+				},
+				{
+					"sub_category":{
+						"slug":{
+							"_eq":slug
+						}
 					}
 				}
-			}
-		]
-	},
-	limit:-1,
-	sort:"-date_created",
-	fields:['name,method,brief_intro,banner,slug,sub_category.title,sub_category.banner,sub_category.description']
-})
+			]
+		},
+		limit:-1,
+		sort:"-date_created",
+		fields:['name,method,brief_intro,banner,slug,sub_category.title,sub_category.banner,sub_category.description']
+	})
 
-const work_info = work_data.data
+	work_info = work_data.data
+}catch(err){
+	console.error(err)
+}
 ---
 
 <Layout title={work_info[0].sub_category.title} description={work_info[0].sub_category.description} og_image={`${url}assets/${work_info[0].sub_category.banner}?format=webp`} og_url={`${import.meta.env.PUBLIC_APP}activity/${slug}`}>

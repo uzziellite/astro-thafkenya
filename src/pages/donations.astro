@@ -5,15 +5,23 @@ import Banner from "@components/Banner.vue"
 
 const url = import.meta.env.PUBLIC_CMS
 const directus = new Directus(url)
-const donation_details_data = await directus.items('thaf_donation_channels').readByQuery({
-	filter:{
-		"status":{
-			"_eq":"published"
-		}
-	},
-	limit:-1
-})
-const donation_details = donation_details_data.data
+let donation_details_data
+let donation_details
+
+try{
+	donation_details_data = await directus.items('thaf_donation_channels').readByQuery({
+		filter:{
+			"status":{
+				"_eq":"published"
+			}
+		},
+		limit:-1
+	})
+
+	donation_details = donation_details_data.data
+}catch(err){
+	console.error(err)
+}
 ---
 <Layout title="Donations - Total Health Advocacy Foundation" description="We rely on the goodwill of all well wishers to help donate anything that can touch a life somewhere">
 	<Banner 
@@ -45,9 +53,7 @@ const donation_details = donation_details_data.data
 								<h2 class="text-xl font-semibold tracking-wide">
 									{item.channel}
 								</h2>
-								<span class="font-medium tracking-widest text-green-600 dark:text-green-600">
-									{item.account}
-								</span>
+								<div class="font-medium tracking-widest text-green-600 dark:text-green-600" set:html={item.account}></div>
 							</div>
 							<p class="dark:text-stone-100">
 								{item.description}

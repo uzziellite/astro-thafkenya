@@ -5,17 +5,23 @@ import Banner from "@components/Banner.vue"
 
 const url = import.meta.env.PUBLIC_CMS
 const directus = new Directus(url)
+let subcategories_data
+let subcategories
 
-const subcategories_data = await directus.items('thaf_work_subcategories').readByQuery({
-	filter:{
-		"status":{
-			"_eq":"published"
-		}
-	},
-	fields:['title,slug']
-})
+try{
+	subcategories_data = await directus.items('thaf_work_subcategories').readByQuery({
+		filter:{
+			"status":{
+				"_eq":"published"
+			}
+		},
+		fields:['title,slug']
+	})
 
-const subcategories = subcategories_data.data
+	subcategories = subcategories_data.data
+}catch(err){
+	console.error(err)
+}
 ---
 <Layout title="Our Work" description="At Total Health Advocacy Foundation, we major in healthcare mostly where we provide our services">
 	<Banner 

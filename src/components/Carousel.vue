@@ -1,9 +1,9 @@
 <template>
-	<div class="bg-cover mt-4 sm:-mt-16 xl:mt-0 h-96 md:h-128 relative" :style="`background-image:url(${images[index]})`">
+	<div class="bg-cover mt-4 sm:-mt-16 xl:mt-0 h-96 md:h-[32rem] relative" :style="`background-image:url(${images[index]})`">
   	<div class="h-full bg-black bg-opacity-30"></div>
     <svg @click="loadPrevBanner" class="hidden md:flex w-12 h-12 absolute left-2 text-white cursor-pointer z-10" style="top:50%;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
     <svg @click="loadNextBanner" class="hidden md:flex w-12 h-12 absolute right-2 text-white cursor-pointer z-10" style="top:50%;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-  	<div class="absolute top-12 md:top-20 grid gap-6 px-2 pt-12 sm:top-32 text-white overflow-x-hidden w-full">
+  	<div class="absolute top-12 grid gap-6 px-2 pt-12 sm:top-32 text-white overflow-x-hidden w-full">
   		<div class="bg-white p-2 md:p-12 shadow-md bg-opacity-10 rounded-lg w-full">
   			<template v-for="(a,b) in titles">
 	    		<h1 :class="`text-2xl md:text-3xl lg:text-5xl uppercase font-bold text-center ${b == index ? '' : 'hidden'}`">

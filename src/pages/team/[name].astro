@@ -9,31 +9,40 @@ export async function getStaticPaths() {
   const url = import.meta.env.PUBLIC_CMS
   
   const directus = new Directus(url)
-  
-  const team_data = await directus.items('thaf_team').readByQuery({
-    filter:{
-      "_and":[
-        {
-          "status":{
-            "_eq":"published"
-          }
-        }
-      ]
-    },
-    limit:-1,
-    fields:["slug"]
-  }).catch()
+  let team_data
+  let team
 
-  const team = team_data.data
+  try{
+    team_data = await directus.items('thaf_team').readByQuery({
+      filter:{
+        "_and":[
+          {
+            "status":{
+              "_eq":"published"
+            }
+          }
+        ]
+      },
+      limit:-1,
+      fields:["slug"]
+    })
+
+    team = team_data.data
+
+  }catch(err){
+    console.error(err)
+  }
 
   let store = []
 
-  team.map((item) => {
-    let data = {}
-    data.params = {}
-    data.params.name = item.slug
-    store.push(data)
-  })
+  if(team){
+    team.map((item) => {
+      let data = {}
+      data.params = {}
+      data.params.name = item.slug
+      store.push(data)
+    })
+  }
   
   return store
 }
@@ -41,14 +50,21 @@ export async function getStaticPaths() {
 const url = import.meta.env.PUBLIC_CMS
 const {name} = Astro.params
 const directus = new Directus(url)
-const profile_data = await directus.items('thaf_team').readByQuery({
-	filter:{
-		"slug":{
-			"_eq":name
-		}
-	}
-})
-const profile = profile_data.data[0]
+let profile_data
+let profile
+
+try{
+  profile_data = await directus.items('thaf_team').readByQuery({
+  	filter:{
+  		"slug":{
+  			"_eq":name
+  		}
+  	}
+  })
+  profile = profile_data.data[0]
+}catch(err){
+  console.error(err)
+}
 ---
 
 <Layout title={profile.name} description={profile.description} og_image={`${url}assets/${profile.banner}`} og_url={`${import.meta.env.PUBLIC_APP}team/${name}`}>

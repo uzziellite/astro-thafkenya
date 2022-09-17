@@ -6,17 +6,22 @@ import Banner from "@components/Banner.vue"
 const url = import.meta.env.PUBLIC_CMS
 
 const directus = new Directus(url)
+let faq_data
+let faqs
+try{
+	faq_data = await directus.items('thaf_faqs').readByQuery({
+		filter:{
+			status:{
+				"_eq":"published"
+			}
+		},
+		limit:-1
+	})
 
-const faq_data = await directus.items('thaf_faqs').readByQuery({
-	filter:{
-		status:{
-			"_eq":"published"
-		}
-	},
-	limit:-1
-})
-
-const faqs = faq_data.data
+	faqs = faq_data.data
+}catch(err){
+	console.error(err)
+}
 ---
 
 <Layout title="Frequently Asked Questions" description="At Total Health Advocacy Foundation, we endeavour to answer your questions to the best of our abilities">

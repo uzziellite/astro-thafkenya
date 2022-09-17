@@ -9,31 +9,43 @@ export async function getStaticPaths() {
   const url = import.meta.env.PUBLIC_CMS
   
   const directus = new Directus(url)
-  
-  const work_type_data = await directus.items('thaf_work_info').readByQuery({
-    filter:{
-      "_and":[
-        {
-          "status":{
-            "_eq":"published"
-          }
-        }
-      ]
-    },
-    limit:-1,
-    fields:["slug"]
-  }).catch()
 
-  const works = work_type_data.data
+  let work_type_data
+  let works
+
+  try{
+	  work_type_data = await directus.items('thaf_work_info').readByQuery({
+	    filter:{
+	      "_and":[
+	        {
+	          "status":{
+	            "_eq":"published"
+	          }
+	        }
+	      ]
+	    },
+	    limit:-1,
+	    fields:["slug"]
+	  })
+	  
+	  works = work_type_data.data
+
+	}catch(err){
+		console.error(err)
+	}
+  
+
 
   let store = []
 
-  works.map((item) => {
-    let data = {}
-    data.params = {}
-    data.params.work_type = item.slug
-    store.push(data)
-  })
+  if(works){
+	  works.map((item) => {
+	    let data = {}
+	    data.params = {}
+	    data.params.work_type = item.slug
+	    store.push(data)
+	  })
+  }
   
   return store
 }
@@ -43,25 +55,31 @@ const url = import.meta.env.PUBLIC_CMS
 const {work_type} = Astro.params
 
 const directus = new Directus(url)
+let work_type_data
+let work_data
 
-const work_type_data = await directus.items('thaf_work_info').readByQuery({
-	filter:{
-		"_and":[
-			{
-				"status":{
-					"_eq":"published"
+try{
+	work_type_data = await directus.items('thaf_work_info').readByQuery({
+		filter:{
+			"_and":[
+				{
+					"status":{
+						"_eq":"published"
+					}
+				},
+				{
+					"slug":{
+						"_eq":work_type
+					}
 				}
-			},
-			{
-				"slug":{
-					"_eq":work_type
-				}
-			}
-		]
-	}
-})
-
-const work_data = work_type_data.data
+			]
+		}
+	})
+	
+	work_data = work_type_data.data
+}catch(err){
+	console.error(err)
+}
 ---
 
 <Layout title={work_data[0].name} description={work_data[0].brief_intro} og_image={`${url}assets/${work_data[0].banner}`} og_url={`${import.meta.env.PUBLIC_APP}work/${work_type}`}>

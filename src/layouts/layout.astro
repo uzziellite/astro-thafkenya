@@ -1,5 +1,5 @@
 ---
-import "../styles/app.css"
+//import "../styles/app.css"
 import {Directus} from "@directus/sdk"
 import TheHeader from "@components/TheHeader.vue"
 import TheFooter from "@components/TheFooter.vue"
@@ -13,29 +13,43 @@ const directus = new Directus(import.meta.env.PUBLIC_CMS)
 
 const covid_url = import.meta.env.PUBLIC_COVID_API
 
-const categories_data = await directus.items('thaf_work_category').readByQuery({
-  filter:{
-    "status":{
-      "_eq":"published"
-    }
-  },
-  fields:['category']
-})
+let categories_data
+let subcategories_data
+let categories
+let subcategories
+let lgrid
 
-const categories = categories_data.data
+try {
+  categories_data = await directus.items('thaf_work_category').readByQuery({
+    filter:{
+      "status":{
+        "_eq":"published"
+      }
+    },
+    fields:['category']
+  })
 
-const lgrid = `lg:grid-cols-${categories.length}`
+  categories = categories_data.data
 
-const subcategories_data = await directus.items('thaf_work_subcategories').readByQuery({
-  filter:{
-    "status":{
-      "_eq":"published"
-    }
-  },
-  fields:['title,slug,category.category']
-})
+  lgrid = `lg:grid-cols-${categories.length}`
+}catch(err){
+  console.error(err)
+}
 
-const subcategories = subcategories_data.data
+try{
+  subcategories_data = await directus.items('thaf_work_subcategories').readByQuery({
+    filter:{
+      "status":{
+        "_eq":"published"
+      }
+    },
+    fields:['title,slug,category.category']
+  })
+
+  subcategories = subcategories_data.data
+}catch(err){
+  console.error(err)
+}
 ---
 <html lang="en-KE">
   <head>

@@ -1,143 +1,69 @@
 ---
+import {Directus} from "@directus/sdk"
 import Layout from "@layouts/layout.astro"
 import Carousel from "@components/Carousel.vue"
+import Newsletter from "@components/Newsletter.svelte"
 
 const url = import.meta.env.PUBLIC_CMS
+const directus = new Directus(url)
+
+let news_data
+let news
+
+try{
+	news_data = await directus.items('thaf_news').readByQuery({
+		filter:{
+			"status":{
+				"_eq":"published"
+			}
+		},
+		limit:8,
+		sort:"-date_created"
+	})
+	news = news_data.data
+}catch(err){
+	console.error(err)
+}
 ---
 <Layout title="Total Health Advocacy Foundation" description="We stand for human rights focusing our activities in five main counties in Kenya; Nairobi, Mombasa, Kirinyaga, Marsabit, and Turkana.">
 	<Carousel
 		client:load
 	/>
-  <section class="mt-10 mb-4 dark:text-stone-100">
-		<div class="container flex flex-col mx-auto lg:flex-row flex-col-reverse">
-			<div class="p-4 mt-4">
-				<img class="w-full lg:h-72 rounded-md" src={`${url}assets/a75193a5-a832-43bb-955c-13fe59a4df58?fit=cover&height=720&width=1080&format=webp`} height={720} width={1080} alt="Photo of total health advocacy foundation building" />
-			</div>
-			<div class="flex flex-col w-full p-6 lg:w-2/3 md:p-8 lg:p-12">
-				<p class="mb-8 text-xl">
-					Total health advocacy foundation stands for human rights. We believe every one is entitled to leading a healthy life with clean air, good nutrition, access to clean water and sanitation as well as clean living environment.
-					We work to understand the particular health needs of the community and working with the people to promote wellness in society.
-				</p>
-				<div class="flex flex-col space-y-4 sm:items-center sm:justify-center sm:flex-row sm:space-y-0 sm:space-x-4 lg:justify-start text-center">
-					<a href="/about-us" class="px-8 py-3 text-lg font-semibold rounded bg-green-800 text-white">
-						About Us
+	<div class="container mx-auto p-4 mt-4">
+		<h2 class="text-3xl font-bold tracking-tight text-center sm:text-5xl text-green-600">
+			Who we are
+		</h2>
+		<p class="max-w-3xl mx-auto mt-4 text-xl text-center dark:text-stone-400">
+			We are a non governmental organization formed with the aim of fostering health solutions to gain and lead a quality healthy life among children, teenagers, women and young adults.
+		</p>
+	</div>
+	<div class="max-w-screen-xl p-5 mx-auto dark:text-stone-100 mt-24">
+		<div class="grid grid-cols-1 gap-5 lg:grid-cols-4 sm:grid-cols-2">
+			{
+				news.map((item) => (
+					<a href={`/news/${item.slug}`} class="relative flex items-end justify-start w-full text-left bg-center bg-cover h-96 dark:bg-stone-500" style={`background-image: url(${url}assets/${item.banner}?format=webp);`}>
+						<div class="absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-b via-transparent from-stone-900 to-stone-900"></div>
+						<div class="absolute top-0 left-0 right-0 flex items-center justify-between mx-5 mt-3">
+							<div class="px-3 py-2 text-xs font-semibold tracking-wider uppercase text-stone-100">
+								{item.category}
+							</div>
+						</div>
+						<h2 class="z-10 p-5">
+							<p class="font-medium text-stone-100">
+								{item.title}
+							</p>
+						</h2>
 					</a>
-				</div>
-			</div>
+				))
+			}
 		</div>
-	</section>
-	<section class="dark:text-stone-100">
-		<div class="container max-w-xl px-6 py-12 mx-auto space-y-24 lg:px-16 lg:max-w-7xl">
-			<div>
-				<h2 class="text-3xl font-bold tracking-tight text-center sm:text-5xl text-green-600">
-					Who we are
-				</h2>
-				<p class="max-w-3xl mx-auto mt-4 text-xl text-center dark:text-stone-400">
-					We are a non governmental organization formed with the aim of fostering health solutions to gain and lead a quality healthy life among children, teenagers, women and young adults.
-				</p>
-			</div>
-			<div class="grid lg:gap-8 lg:grid-cols-2 lg:items-center">
-				<div>
-					<h3 class="text-2xl font-bold tracking-tight sm:text-3xl text-green-600 dark:text-green-600">
-						Our Principles
-					</h3>
-					<p class="mt-3 text-lg dark:text-stone-100">
-						Our principles are bench marked on this five pillars
-					</p>
-					<div class="mt-12 space-y-12">
-						<div class="flex">
-							<div class="flex-shrink-0">
-								<div class="flex items-center justify-center w-12 h-12 rounded-md bg-green-600 text-white dark:bg-green-600 dark:text-stone-900">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-									</svg>
-								</div>
-							</div>
-							<div class="ml-4">
-								<h4 class="text-xl font-medium leading-6 text-green-600 dark:text-green-600">
-									Health
-								</h4>
-								<p class="mt-2 dark:text-stone-100">
-									Strengthen community health systems through direct action, advocacy and collaboration.
-								</p>
-							</div>
-						</div>
-						<div class="flex">
-							<div class="flex-shrink-0">
-								<div class="flex items-center justify-center w-12 h-12 rounded-md bg-green-600 text-white dark:bg-green-600 dark:text-stone-900">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-									</svg>
-								</div>
-							</div>
-							<div class="ml-4">
-								<h4 class="text-xl font-medium leading-6 text-green-600 dark:text-green-600">
-									Integrity
-								</h4>
-								<p class="mt-2 dark:text-stone-100">
-									Promote equal chances of life to the most vulnerable by ensuring expanded and simplified interventions in maternal health and early life.
-								</p>
-							</div>
-						</div>
-						<div class="flex">
-							<div class="flex-shrink-0">
-								<div class="flex items-center justify-center w-12 h-12 rounded-md bg-green-600 text-white dark:bg-green-600 dark:text-stone-900">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-									</svg>
-								</div>
-							</div>
-							<div class="ml-4">
-								<h4 class="text-xl font-medium leading-6 text-green-600 dark:text-green-600">
-									Humanity
-								</h4>
-								<p class="mt-2 dark:text-stone-100">
-									Address determinants of mental health, causes and interventions.
-								</p>
-							</div>
-						</div>
-						<div class="flex">
-							<div class="flex-shrink-0">
-								<div class="flex items-center justify-center w-12 h-12 rounded-md bg-green-600 text-white dark:bg-green-600 dark:text-stone-900">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-									</svg>
-								</div>
-							</div>
-							<div class="ml-4">
-								<h4 class="text-xl font-medium leading-6 text-green-600 dark:text-green-600">
-									Equality
-								</h4>
-								<p class="mt-2 dark:text-stone-100">
-									Mitigate causes and effects of alcohol and drug/substance abuse amongst the youth and teenagers by identification, mentorship, guidance, counselling and rehabilitation.
-								</p>
-							</div>
-						</div>
-						<div class="flex">
-							<div class="flex-shrink-0">
-								<div class="flex items-center justify-center w-12 h-12 rounded-md bg-green-600 text-white dark:bg-green-600 dark:text-stone-900">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-									</svg>
-								</div>
-							</div>
-							<div class="ml-4">
-								<h4 class="text-xl font-medium leading-6 text-green-600 dark:text-green-600">
-									Development
-								</h4>
-								<p class="mt-2 dark:text-stone-100">
-									Combat communicable diseases, pandemics and emergencies.
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div aria-hidden="true" class="mt-10 lg:mt-0">
-					<img src={`${url}assets/2737b286-cb32-48f5-a396-58a205bc4a3f?format=webp`} alt="Clean water access" class="mx-auto rounded-lg shadow-lg dark:bg-stone-500" height={350} width={480} />
-				</div>
-			</div>
-		</div>
-	</section>
+		<a class="relative mt-4 inline-block text-sm font-bold group focus:outline-none focus:ring" href="/news">
+		  <span class="absolute inset-0 border border-current"></span>
+		  <span class="block px-12 py-3 bg-white dark:bg-gray-900 border border-current">
+		    View More
+		  </span>
+		</a>
+	</div>
 	<section class="container max-w-xl px-6 py-12 mx-auto space-y-24 lg:px-16 lg:max-w-7xl">
 		<div class="grid md:grid-cols-2 gap-6 my-4">
 			<div class="flex flex-col space-y-4">
@@ -163,7 +89,7 @@ const url = import.meta.env.PUBLIC_CMS
 				We are in need of volunteers to help steer change in the society. Please contact us if you want to volunteer.
 			</p>
 			<div class="grid place-content-center">
-				<a class="text-white font-medium bg-green-800 p-2 rounded-md" href="https://forms.gle/r2QuX7pBULKLHwfy6" target="_blank">
+				<a class="text-white font-medium bg-green-600 p-2 rounded-md" href="https://forms.gle/r2QuX7pBULKLHwfy6" target="_blank">
 					Contact Us
 				</a>
 			</div>
@@ -188,4 +114,5 @@ const url = import.meta.env.PUBLIC_CMS
 			</div>
 		</div>
 	</section>
+	<Newsletter client:load />
 </Layout>
