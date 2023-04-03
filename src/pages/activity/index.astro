@@ -9,13 +9,13 @@ let subcategories_data
 let subcategories
 
 try{
-	subcategories_data = await directus.items('thaf_work_subcategories').readByQuery({
+	subcategories_data = await directus.items('thaf_work_info').readByQuery({
 		filter:{
 			"status":{
 				"_eq":"published"
 			}
 		},
-		fields:['title,slug']
+		fields:['name,slug']
 	})
 
 	subcategories = subcategories_data.data
@@ -23,7 +23,7 @@ try{
 	console.error(err)
 }
 ---
-<Layout title="Our Work - Total Health Advocacy Foundation" description="At Total Health Advocacy Foundation, we major in healthcare mostly where we provide our services">
+<Layout title="Our Activities - Total Health Advocacy Foundation" description="At Total Health Advocacy Foundation, we major in healthcare mostly where we provide our services">
 	<Banner 
 		background={`${url}assets/c73d9c20-c812-42ce-805e-737db8b56aab?format=webp`}
 		title="What we do" 
@@ -34,10 +34,10 @@ try{
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 				{
 					subcategories.map((item) => (
-						<a href={`/news/${item.slug}`} class="p-2 rounded-md shadow-md bg-white dark:bg-stone-800 dark:text-stone-100">
+						<a href={`/activity/${item.slug}`} class="p-2 rounded-md shadow-md bg-white dark:bg-stone-800 dark:text-stone-100">
 							<div class="mt-6 mb-2">
 								<span class="text-xl font-semibold tracking-wide">
-									{item.title}
+									{item.name}
 								</span>
 							</div>
 						</a>

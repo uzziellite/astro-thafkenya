@@ -13,7 +13,12 @@
 						About
 					</a>
 				</li>
-				<li class="hidden lg:flex flex items-center">
+				<li class="flex">
+					<a href="/activity" class="flex items-center px-4 -mb-1">
+						Work
+					</a>
+				</li>
+				<!--<li class="hidden lg:flex flex items-center">
           <div class="px-3 py-2 flex items-center">
             <div class="relative" @mouseover="workActive = true" @mouseleave="workActive = false">
               <button type="button" class="flex items-center px-4 -mb-1" :aria-expanded="workActive ? 'true' : 'false'">
@@ -46,7 +51,7 @@
               </div>
             </div>
           </div>
-        </li>
+        </li>-->
 			</ul>
 			<a href="/" aria-label="Back to homepage" class="flex items-center">
 				<img src="/images/logo.jpg" class="w-20" width="50" height="50" alt="Logo">
@@ -85,7 +90,7 @@
 				</a>
 			</li>
 			<li>
-				<a @click="openNavbar" href="/work" class="flex -mb-1 dark:border-transparent">
+				<a @click="openNavbar" href="/activity" class="flex -mb-1 dark:border-transparent">
 					Work
 				</a>
 			</li>

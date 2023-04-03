@@ -1,7 +1,5 @@
 ## 🧞 Commands
 
-All commands are run from the root of the project, from a terminal:
-
 | Command           | Action                                       |
 |:----------------  |:-------------------------------------------- |
 | `npm install`     | Installs dependencies                        |
@@ -9,13 +7,3 @@ All commands are run from the root of the project, from a terminal:
 | `npm run build`   | Build your production site to `./dist/`      |
 | `npm run preview` | Preview your build locally, before deploying |
 
-##		Data Access
-
-For the application to work, link it to directus CMS or modify it to work with a CMS of your choosing.
-Edit the `.env` file
-Should you feel stuck, get in touch and I will help you out.
-
-You can visit https://uzzieltech.co.ke/contact
-
-This project can be viewed here
-https://thafkenya.org

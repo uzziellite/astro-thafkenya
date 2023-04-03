@@ -14,18 +14,13 @@ export async function getStaticPaths() {
   let activity
 
   try{
-	  activity_data = await directus.items('thaf_work_subcategories').readByQuery({
+	  activity_data = await directus.items('thaf_work_info').readByQuery({
 	    filter:{
 	      "_and":[
 	        {
 	          "status":{
 	            "_eq":"published"
 	          }
-	        },
-	        {
-	        	"description":{
-	        		"_neq":null
-	        	}
 	        }
 	      ]
 	    },
@@ -72,17 +67,14 @@ try{
 					}
 				},
 				{
-					"sub_category":{
-						"slug":{
-							"_eq":slug
-						}
+					"slug":{
+						"_eq":slug
 					}
 				}
 			]
 		},
 		limit:-1,
-		sort:"-date_created",
-		fields:['name,method,brief_intro,banner,slug,sub_category.title,sub_category.banner,sub_category.description']
+		fields:['name,method,brief_intro,banner,slug,details']
 	})
 
 	work_info = work_data.data
@@ -91,13 +83,21 @@ try{
 }
 ---
 
-<Layout title={work_info[0].sub_category.title} description={work_info[0].sub_category.description} og_image={`${url}assets/${work_info[0].sub_category.banner}?format=webp`} og_url={`${import.meta.env.PUBLIC_APP}activity/${slug}`}>
+<Layout title={`${work_info[0].name} - Total Health Advocacy Foundation`} description={work_info[0].brief_intro} og_image={`${url}assets/${work_info[0].banner}?format=webp`} og_url={`${import.meta.env.PUBLIC_APP}activity/${slug}`}>
 	<Banner 
-		background={`${url}assets/${work_info[0].sub_category.banner}`} 
-		title={work_info[0].sub_category.title} 
+		background={`${url}assets/${work_info[0].banner}`} 
+		title={work_info[0].name} 
 		description="" 
 	/>
-	<section class="dark:text-stone-100">
+	<article class="grid place-content-center mx-auto dark:text-stone-100 mb-5">
+		<p class="text-sm text-center dark:text-stone-400">by
+			<a href="/" class="hover:underline dark:text-green-600">
+				<span>Total Health Advocacy Foundation</span>
+			</a>
+		</p>
+		<div class="prose prose-lg dark:prose-invert mb-6 max-w-4xl" set:html={work_info[0].details}></div>
+	</article>
+	<!--<section class="dark:text-stone-100">
 		<div class="container p-4 sm:p-12 mx-auto">
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 				{
@@ -120,5 +120,5 @@ try{
 				}
 			</div>
 		</div>
-	</section>
+	</section>-->
 </Layout>
